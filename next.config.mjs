@@ -9,6 +9,15 @@ const nextConfig = {
       },
     },
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dwfet15kj/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
