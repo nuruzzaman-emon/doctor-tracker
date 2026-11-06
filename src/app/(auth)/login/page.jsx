@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <section className="mx-auto w-full max-w-lg rounded-2xl border border-gray-100 bg-white p-6 shadow-lg sm:p-8">
+    <section style={{ width: "calc(100vw - 2rem)" }} className="mx-auto min-w-0 max-w-lg rounded-2xl border border-gray-100 bg-white p-5 shadow-lg sm:p-8">
       <div className="mb-7 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
           <FaUserCircle size={28} />
@@ -28,7 +28,7 @@ export default function LoginPage() {
       <LoginForm />
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           href="/register"
           className="font-semibold text-emerald-600 hover:text-emerald-700"

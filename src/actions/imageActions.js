@@ -8,13 +8,14 @@ export const getImageLink = async (image) => {
     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD}/image/upload`,
     {
       method: "POST",
-      signal: AbortSignal.timeout(30000),
+      signal: AbortSignal.timeout(120000),
       body: formData,
     }
   );
 
   if (!response.ok) {
-    throw new Error("Image upload failed");
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.error?.message || "Image upload failed");
   }
 
   const imgData = await response.json();

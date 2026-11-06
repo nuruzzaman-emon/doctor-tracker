@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <section className="mx-auto w-full max-w-xl rounded-2xl border border-gray-100 bg-white p-6 shadow-lg sm:p-8">
+    <section style={{ width: "calc(100vw - 2rem)" }} className="mx-auto min-w-0 max-w-xl rounded-2xl border border-gray-100 bg-white p-5 shadow-lg sm:p-8">
       {/* Heading */}
       <div className="mb-7 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">

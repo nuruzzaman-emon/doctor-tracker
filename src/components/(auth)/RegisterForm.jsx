@@ -2,28 +2,35 @@
 
 import { getImageLink } from "@/actions/imageActions";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import SubmitLoader from "../SubmitLoader";
+import { useForm, useWatch } from "react-hook-form";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import SubmitLoader from "../(others)/SubmitLoader";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const RegisterForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [err, setErr] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     formState: { errors },
   } = useForm();
 
   const handleRegister = async (data) => {
     setIsSubmitting(true);
+    setErr("");
+    setIsSuccess(false);
     try {
-      console.log("1. Starting image upload...");
       const photo_url = data?.photo?.[0]
         ? await getImageLink(data.photo[0])
         : null;
-      console.log("2. Image upload finished:", photo_url);
 
       const userData = {
         name: data?.name,
@@ -33,25 +40,37 @@ const RegisterForm = () => {
         password: data?.password,
       };
 
-      console.log("3. Sending data to backend...");
-      const res = await fetch("http://localhost:5000/users", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
-      const result = await res.json();
+      const result = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(result.message || "Failed to register");
 
-      console.log("4. Registration successful:", result);
+      setIsSuccess(true);
+      router.push("/login");
+      Swal.fire({
+        title: "Account has created",
+        text: "Please login with email and password",
+        icon: "success",
+        draggable: true,
+      });
     } catch (error) {
-      console.error("Registration error caught at:", error.message);
+      console.error("Registration failed:", error);
+      setIsSuccess(false);
+      setErr(
+        error.name === "TimeoutError"
+          ? "The image upload took too long. Check your connection and try again."
+          : error.message || "Registration failed. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const password = watch("password");
+  const password = useWatch({ control, name: "password" });
 
   return (
     <form onSubmit={handleSubmit(handleRegister)} className="space-y-5">
@@ -166,20 +185,31 @@ const RegisterForm = () => {
         >
           Password
         </label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Create a password"
-          autoComplete="new-password"
-          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters",
-            },
-          })}
-        />
+        <div className="relative">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Create a password"
+            autoComplete="new-password"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 pr-12 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-pressed={showPassword}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
         {errors.password && (
           <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
         )}
@@ -193,24 +223,42 @@ const RegisterForm = () => {
         >
           Confirm Password
         </label>
-        <input
-          id="confirmPassword"
-          type="password"
-          placeholder="Confirm your password"
-          autoComplete="new-password"
-          className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-          {...register("confirmPassword", {
-            required: "Please confirm your password",
-            validate: (value) => value === password || "Passwords do not match",
-          })}
-        />
+        <div className="relative">
+          <input
+            id="confirmPassword"
+            type={showConfirmPassword ? "text" : "password"}
+            placeholder="Confirm your password"
+            autoComplete="new-password"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 pr-12 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              validate: (value) =>
+                value === password || "Passwords do not match",
+            })}
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword((visible) => !visible)}
+            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+            aria-pressed={showConfirmPassword}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+          >
+            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
+        </div>
         {errors.confirmPassword && (
           <p className="mt-1 text-sm text-red-500">
             {errors.confirmPassword.message}
           </p>
         )}
       </div>
-      {err && <p className="mt-1 text-sm text-red-500">{err}</p>}
+      {err && (
+        <p
+          className={`mt-1 text-sm ${isSuccess ? "text-emerald-700" : "text-red-500"}`}
+        >
+          {err}
+        </p>
+      )}
 
       {/* Submit Button */}
       <button

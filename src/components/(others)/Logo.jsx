@@ -8,7 +8,7 @@ const Logo = () => {
   return (
     <div>
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2">
+      <Link href="/" className="flex shrink-0 items-center gap-1.5 sm:gap-2">
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
           <Image
             className="h-5 w-5"
@@ -18,7 +18,7 @@ const Logo = () => {
             alt="logo"
           />
         </span>
-        <span className="text-lg font-bold tracking-tight text-slate-800">
+        <span className="text-base font-bold tracking-tight text-slate-800 sm:text-lg">
           Doctor<span className="text-teal-600">Tracker</span>
         </span>
       </Link>
