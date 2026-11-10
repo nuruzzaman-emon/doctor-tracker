@@ -33,7 +33,7 @@ export default function PatientDirectory() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors?limit=100`, {
+    fetch(`/api/doctors?limit=100`, {
       credentials: "include",
       cache: "no-store",
       signal: controller.signal,
@@ -54,7 +54,7 @@ export default function PatientDirectory() {
       setStatus("loading");
       try {
         const query = new URLSearchParams({ ...filters, page: String(page), limit: String(PAGE_SIZE) });
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/patients?${query}`, {
+        const response = await fetch(`/api/patients?${query}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,
@@ -109,7 +109,7 @@ export default function PatientDirectory() {
     setSaving(true);
     setErrorMessage("");
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/patients/${editingPatient._id}`, {
+      const response = await fetch(`/api/patients/${editingPatient._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -138,7 +138,7 @@ export default function PatientDirectory() {
     if (!confirmation.isConfirmed) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/patients/${patient._id}`, {
+      const response = await fetch(`/api/patients/${patient._id}`, {
         method: "DELETE",
         credentials: "include",
       });

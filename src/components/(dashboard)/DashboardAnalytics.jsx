@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LoadingSkeleton from "@/components/(others)/LoadingSkeleton";
+import { API_BASE_URL } from "@/lib/api";
 
 const metrics = [
   ["totalDoctors", "Total doctors", "Doctors in the directory"],
@@ -47,7 +48,7 @@ export default function DashboardAnalytics() {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/stats`, {
+    fetch(`${API_BASE_URL}/dashboard/stats`, {
       credentials: "include",
       cache: "no-store",
       signal: controller.signal,

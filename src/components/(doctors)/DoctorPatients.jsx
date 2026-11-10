@@ -16,7 +16,7 @@ export default function DoctorPatients({ doctorId }) {
 
   const loadPatients = useCallback(async (signal) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/${doctorId}/patients`, {
+      const response = await fetch(`/api/doctors/${doctorId}/patients`, {
         credentials: "include",
         cache: "no-store",
         signal,
@@ -46,7 +46,7 @@ export default function DoctorPatients({ doctorId }) {
     setSaving(true);
     setError("");
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/${doctorId}/patients`, {
+      const response = await fetch(`/api/doctors/${doctorId}/patients`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -75,7 +75,7 @@ export default function DoctorPatients({ doctorId }) {
     if (!confirmation.isConfirmed) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/${doctorId}/patients/${patient._id}`, {
+      const response = await fetch(`/api/doctors/${doctorId}/patients/${patient._id}`, {
         method: "DELETE",
         credentials: "include",
       });

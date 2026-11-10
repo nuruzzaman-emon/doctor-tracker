@@ -41,7 +41,7 @@ export default function DoctorDirectory() {
           page: String(page),
           limit: String(PAGE_SIZE),
         });
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors?${query}`, {
+        const response = await fetch(`/api/doctors?${query}`, {
           credentials: "include",
           cache: "no-store",
           signal: controller.signal,

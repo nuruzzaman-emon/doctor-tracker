@@ -23,7 +23,7 @@ export default function CreateDoctorForm() {
     setIsSubmitting(true);
     setError("");
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors`, {
+      const response = await fetch(`/api/doctors`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

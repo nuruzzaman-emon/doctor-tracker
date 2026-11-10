@@ -1,11 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_BASE_URL } from "@/lib/api";
 
 export const signOut = async () => {
-  if (!API_URL) {
-    throw new Error("NEXT_PUBLIC_API_URL is not configured.");
-  }
-
-  const response = await fetch(`${API_URL}/logout`, {
+  const response = await fetch(`${API_BASE_URL}/logout`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
